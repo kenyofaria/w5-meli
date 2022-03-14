@@ -4,16 +4,17 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 
+import br.com.mercadolivre.heranca.Administrativo;
 import br.com.mercadolivre.heranca.Engenheiro;
 import br.com.mercadolivre.heranca.Funcionario;
 
-public class Programa {
+public class ReusoSample {
 
 	
 	
 	public static void main(String[] args) {
 		
-		Funcionario funcionario = new Funcionario("948.233.233-50", "kenyo", LocalDate.of(1980, Month.FEBRUARY, 25), "rua xyz", "q. 10 lt. 20", 0, "74000-000", "bairro do kenyo");
+		Administrativo funcionario = new Administrativo("948.233.233-50", "kenyo", LocalDate.of(1980, Month.FEBRUARY, 25), "rua xyz", "q. 10 lt. 20", 0, "74000-000", "bairro do kenyo");
 		funcionario.setSalario(new BigDecimal(1201));
 		System.out.println(funcionario);
 		System.out.println(funcionario.getSalario() + "     " + funcionario.getDescontos());

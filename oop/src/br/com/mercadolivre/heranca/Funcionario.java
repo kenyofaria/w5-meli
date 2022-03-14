@@ -3,7 +3,7 @@ package br.com.mercadolivre.heranca;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Funcionario {
+public abstract class Funcionario {
 
 	private static int qtdeFuncionarios = 0;
 	
@@ -102,6 +102,7 @@ public class Funcionario {
 	public static int getQtdeFuncionarios() {
 		return qtdeFuncionarios;
 	}
+	public abstract BigDecimal getBonificacao();
 	
 	@Override
 	public String toString() {
