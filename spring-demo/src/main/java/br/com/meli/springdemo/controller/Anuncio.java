@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Anuncio {
 
+	private Integer id;
+	private String codigo;
 	private String titulo;
 	private String categoria;
 	private double valor;

@@ -5,10 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,12 +18,12 @@ public class MyController {
 
 	static {
 		anuncios.addAll(Arrays.asList(
-				new Anuncio("Capsulas de cafe", "bebidas", 400),
-				new Anuncio("fone JBL","eletronicos", 500),
-				new Anuncio("mouse bluetooth", "eletronicos", 600),
-				new Anuncio("copo stanley","utilidades",700),
-				new Anuncio("jogo de chaves","utilidades", 800),
-				new Anuncio("ovo de pascoa","regalia", 900)
+				new Anuncio(1,"MLB123", "Capsulas de cafe", "bebidas", 400),
+				new Anuncio(2,"MLB345", "fone JBL","eletronicos", 500),
+				new Anuncio(3,"MLB876", "mouse bluetooth", "eletronicos", 600),
+				new Anuncio(4,"MLB098", "copo stanley","utilidades",700),
+				new Anuncio(5,"MLB789", "jogo de chaves","utilidades", 800),
+				new Anuncio(6,"MLB999", "ovo de pascoa","regalia", 900)
 			));	
 	}
 	
@@ -51,37 +48,37 @@ public class MyController {
 	}
 	
 	@GetMapping("/anuncios")
-	public List<Anuncio> retorna(@RequestParam(required = false, name="c") String categoria,
+	public List<AnuncioDTO> retorna(@RequestParam(required = false, name="c") String categoria,
 			                     @RequestParam(required = false, name="p") Double preco) {
 		
 		if(categoria!=null && !categoria.isEmpty()) {
 			if(preco!=null) {
-				return anuncios.stream()
-				.filter(a->a.getCategoria().equalsIgnoreCase(categoria))
-				.filter(a->a.getValor()<=preco)
-				.collect(Collectors.toList());
+				return AnuncioDTO.converte(anuncios.stream()
+						.filter(a->a.getCategoria().equalsIgnoreCase(categoria))
+						.filter(a->a.getValor()<=preco)
+						.collect(Collectors.toList()));  
 			}
-			return anuncios.stream()
+			return AnuncioDTO.converte(anuncios.stream()
 					.filter(a->a.getCategoria().equals(categoria))
-					.collect(Collectors.toList());
+					.collect(Collectors.toList()));  
 		}
 		if(preco!=null) {
-			return anuncios.stream()
+			return AnuncioDTO.converte(anuncios.stream()
 					.filter(a->a.getValor()<=preco)
-					.collect(Collectors.toList());	
+					.collect(Collectors.toList()));
 		}
-		return anuncios;
+		return new ArrayList<AnuncioDTO>();
 	}
 	
-	@GetMapping("/anuncios/ate/{p}")
-	public List<Anuncio> anuncios(@PathVariable(name = "p") double preco){
-		return anuncios.stream().filter(a -> a.getValor() <= preco).collect(Collectors.toList());
-	}
+//	@GetMapping("/anuncios/ate/{p}")
+//	public List<Anuncio> anuncios(@PathVariable(name = "p") double preco){
+//		return anuncios.stream().filter(a -> a.getValor() <= preco).collect(Collectors.toList());
+//	}
 	
 	@PostMapping("/anuncios")
-	public String salvar(@RequestBody Anuncio anuncio) {
-		anuncios.add(anuncio);
-		return anuncio.getTitulo().concat(" cadastrado com sucesso");
+	public String salvar(@RequestBody AnuncioDTO dto) {
+		anuncios.add(dto.converte());
+		return dto.getTitulo().concat(" cadastrado com sucesso");
 	}
 	
 	
