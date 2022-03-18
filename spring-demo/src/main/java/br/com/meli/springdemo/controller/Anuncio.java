@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class Anuncio {
 
 	private String titulo;
+	private String categoria;
 	private double valor;
-	
 
 	
 }
