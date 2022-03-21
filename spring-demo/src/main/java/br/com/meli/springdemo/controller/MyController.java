@@ -3,6 +3,7 @@ package br.com.meli.springdemo.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +20,12 @@ import br.com.meli.springdemo.service.AnuncioService;
 @RestController
 public class MyController {
 	
+	@Autowired
 	private AnuncioService anuncioService;
 
 	public MyController() {
-		anuncioService = new AnuncioService();
+		System.out.println("criando objeto da classe " + this.getClass().getName());
+		//anuncioService = new AnuncioService();
 	}
 
 	//respondendo a uma chamada get http
@@ -45,15 +48,8 @@ public class MyController {
 		return ResponseEntity.ok(new AnuncioDTO().converte(anuncio));
 	}
 	
-	
-//	@GetMapping("/anuncios/ate/{p}")
-//	public List<Anuncio> anuncios(@PathVariable(name = "p") double preco){
-//		return anuncios.stream().filter(a -> a.getValor() <= preco).collect(Collectors.toList());
-//	}
-	
 	@PostMapping("/anuncios")
 	public ResponseEntity<AnuncioDTO> salvar(@RequestBody AnuncioDTO dto, UriComponentsBuilder uriBuilder) {
-		
 		Anuncio anuncio = dto.converte();
 		anuncioService.salvar(anuncio);
 		//esta URI sinaliza ao cliente o caminho a ser usado para recuperar o recurso que esta sendo criado.
@@ -62,11 +58,8 @@ public class MyController {
 				.buildAndExpand(anuncio.getCodigo())
 				.toUri();
 		AnuncioDTO d = dto.converte(anuncio);
-		
 		return ResponseEntity.created(uri).body(d); 
 	}
-	
-	
 	
 	
 }
