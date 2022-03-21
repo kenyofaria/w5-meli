@@ -1,4 +1,4 @@
-package br.com.meli.springdemo.controller;
+package br.com.meli.springdemo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,9 +1,10 @@
-package br.com.meli.springdemo.controller;
+package br.com.meli.springdemo.dto;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import br.com.meli.springdemo.entity.Anuncio;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+//@JsonIgnoreProperties(value = { "categoria" })
 public class AnuncioDTO {
 	
 	private String titulo;
 	private Double valor;
-	private String categoria;
+    private String categoria;
 	
 
 	public Anuncio converte() {
