@@ -16,8 +16,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.meli.springdemo.dto.AnuncioDTO;
 import br.com.meli.springdemo.entity.Anuncio;
 import br.com.meli.springdemo.service.AnuncioService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
+@Api(value = "Anuncios")
 public class MyController {
 	
 	@Autowired
@@ -29,12 +32,13 @@ public class MyController {
 	}
 
 	//respondendo a uma chamada get http
+	@ApiOperation(value = "Check if service is up")
 	@GetMapping("/ping")
 	public String ping() {
 		return "pong";
 	}
 	
-	
+	@ApiOperation(value = "Fetch all existing ads based on params")
 	@GetMapping("/anuncios")
 	public ResponseEntity<List<AnuncioDTO>> retorna(@RequestParam(required = false, name="c") String categoria,
 			                     @RequestParam(required = false, name="p") Double preco) {
@@ -42,12 +46,14 @@ public class MyController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@ApiOperation(value = "Fetch an especific ad based on code")
 	@GetMapping("/anuncios/{codigo}")
 	public ResponseEntity<AnuncioDTO> obter(@PathVariable String codigo){
 		Anuncio anuncio = anuncioService.obter(codigo);
 		return ResponseEntity.ok(new AnuncioDTO().converte(anuncio));
 	}
 	
+	@ApiOperation(value = "Create a new ad passed on body")
 	@PostMapping("/anuncios")
 	public ResponseEntity<AnuncioDTO> salvar(@RequestBody AnuncioDTO dto, UriComponentsBuilder uriBuilder) {
 		Anuncio anuncio = dto.converte();
