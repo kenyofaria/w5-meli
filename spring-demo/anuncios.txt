@@ -1,0 +1,3 @@
+110;MLB110;oculos de sol;beleza;800.0
+239;MLB239;valvula termostatica c180;automotivo;1400.0
+200;MLB200;fiat mobi;carros;100000.0

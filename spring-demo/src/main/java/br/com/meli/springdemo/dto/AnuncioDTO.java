@@ -22,7 +22,7 @@ public class AnuncioDTO {
 
 	public Anuncio converte() {
 		int numero = ThreadLocalRandom.current().nextInt(100, 999);
-		return new Anuncio(null, "MLB".concat(String.valueOf(numero)),  this.titulo, this.categoria, this.valor);
+		return new Anuncio(numero, "MLB".concat(String.valueOf(numero)),  this.titulo, this.categoria, this.valor);
 	}
 	
 	public AnuncioDTO converte(Anuncio anuncio) {

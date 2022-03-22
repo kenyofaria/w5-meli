@@ -1,6 +1,7 @@
 package br.com.meli.springdemo.controller;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +16,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.meli.springdemo.dto.AnuncioDTO;
 import br.com.meli.springdemo.entity.Anuncio;
+import br.com.meli.springdemo.service.AnuncioCategoriaValidator;
+import br.com.meli.springdemo.service.AnuncioDuplicidadeValidator;
 import br.com.meli.springdemo.service.AnuncioService;
+import br.com.meli.springdemo.service.AnuncioTituloValidator;
+import br.com.meli.springdemo.service.AnuncioValorValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @Api(value = "Anuncios")
-public class MyController {
+public class AnuncioController {
 	
 	@Autowired
 	private AnuncioService anuncioService;
 
-	public MyController() {
+	public AnuncioController() {
 		System.out.println("criando objeto da classe " + this.getClass().getName());
 		//anuncioService = new AnuncioService();
 	}
@@ -57,7 +62,13 @@ public class MyController {
 	@PostMapping("/anuncios")
 	public ResponseEntity<AnuncioDTO> salvar(@RequestBody AnuncioDTO dto, UriComponentsBuilder uriBuilder) {
 		Anuncio anuncio = dto.converte();
-		anuncioService.salvar(anuncio);
+			
+		anuncioService.salvar(anuncio, Arrays.asList(
+				new AnuncioTituloValidator(anuncio),
+				new AnuncioCategoriaValidator(anuncio),
+				new AnuncioValorValidator(anuncio),
+				new AnuncioDuplicidadeValidator(anuncio)
+				));
 		//esta URI sinaliza ao cliente o caminho a ser usado para recuperar o recurso que esta sendo criado.
 		URI uri = uriBuilder
 				.path("/anuncios/{id}")

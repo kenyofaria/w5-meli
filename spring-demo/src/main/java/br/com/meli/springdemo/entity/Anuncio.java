@@ -1,10 +1,12 @@
 package br.com.meli.springdemo.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Anuncio {
@@ -15,5 +17,9 @@ public class Anuncio {
 	private String categoria;
 	private double valor;
 
-	
+	@Override
+	public String toString() {
+		return String.valueOf(id).concat(";").concat(codigo).concat(";")
+				.concat(titulo).concat(";").concat(categoria).concat(";").concat(String.valueOf(valor));
+	}
 }
