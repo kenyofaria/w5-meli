@@ -4,6 +4,11 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import br.com.meli.springdemo.entity.Anuncio;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +20,12 @@ import lombok.NoArgsConstructor;
 //@JsonIgnoreProperties(value = { "categoria" })
 public class AnuncioDTO {
 	
+	@NotNull(message = "título é obrigatório")
+	@NotBlank(message = "título é obrigatório")
+	@NotEmpty(message = "título é obrigatório")
+	@Size(min = 5, max = 255, message="o título deve ter tamanho entre 5 e 255 caracteres")
 	private String titulo;
+	@NotNull(message = "valor é obrigatório")
 	private Double valor;
     private String categoria;
 	

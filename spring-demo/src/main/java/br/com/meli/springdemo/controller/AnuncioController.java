@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +62,7 @@ public class AnuncioController {
 	
 	@ApiOperation(value = "Create a new ad passed on body")
 	@PostMapping("/anuncios")
-	public ResponseEntity<AnuncioDTO> salvar(@RequestBody AnuncioDTO dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<AnuncioDTO> salvar(@Valid @RequestBody AnuncioDTO dto, UriComponentsBuilder uriBuilder) {
 		Anuncio anuncio = dto.converte();
 			
 		anuncioService.salvar(anuncio, Arrays.asList(
