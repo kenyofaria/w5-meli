@@ -11,14 +11,18 @@ import javax.validation.constraints.Size;
 
 import br.com.meli.springdemo.entity.Anuncio;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 //@JsonIgnoreProperties(value = { "categoria" })
 public class AnuncioDTO {
+	
 	
 	@NotNull(message = "título é obrigatório")
 	@NotBlank(message = "título é obrigatório")

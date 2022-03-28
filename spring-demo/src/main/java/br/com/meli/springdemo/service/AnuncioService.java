@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.meli.springdemo.entity.Anuncio;
+import br.com.meli.springdemo.repository.AnuncioRepository;
 import br.com.meli.springdemo.repository.RepositoryWave5;
 
 @Service
@@ -26,11 +27,10 @@ public class AnuncioService {
 //			));	
 //	}
 	
-	@Autowired
-	private RepositoryWave5<Anuncio> repository;
+	private AnuncioRepository repository;
 	
-	public AnuncioService() {
-		System.out.println("criando objeto da classe " + this.getClass().getName());
+	public AnuncioService(AnuncioRepository repository) {
+		this.repository = repository;
 	}
 	
 	public synchronized List<Anuncio> lista(String categoria, Double preco){
@@ -69,10 +69,21 @@ public class AnuncioService {
 		validadores.forEach(v -> {
 			try {
 				v.valida();
-				repository.insere(anuncio);
+				if(!anuncioExistente(anuncio)) {
+					repository.insere(anuncio);
+				}else {
+					throw new RuntimeException("Anuncio já cadastrado");
+				}
 			} catch (ValidacaoException e) {
 				e.printStackTrace();
 			}
 		});	
+	}
+	public synchronized void salvar(Anuncio anuncio) {
+		if(!anuncioExistente(anuncio)) {
+			repository.insere(anuncio);
+		}else {
+			throw new RuntimeException("Anuncio já cadastrado");
+		}
 	}
 }

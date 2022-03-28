@@ -5,3 +5,9 @@
 356;MLB356;fiat mobi;carros;100000.0
 356;MLB356;fiat mobi;carros;100000.0
 356;MLB356;fiat mobi;carros;100000.0
+659;MLB659;fidfdfdfdfd;carros;0.0
+659;MLB659;fidfdfdfdfd;carros;0.0
+659;MLB659;fidfdfdfdfd;carros;0.0
+111;MLB111;fidfdfdfdfd;carros;0.0
+111;MLB111;fidfdfdfdfd;carros;0.0
+111;MLB111;fidfdfdfdfd;carros;0.0

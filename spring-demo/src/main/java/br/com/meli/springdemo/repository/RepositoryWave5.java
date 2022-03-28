@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RepositoryWave5 <T>{
 
-	void insere(T t);
+	T insere(T t);
 	T obter(String codigo);
 	List<T> lista();
 	

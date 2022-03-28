@@ -22,6 +22,8 @@ public class MyExceptionHandler {
 		return ResponseEntity.badRequest().body(bodyOfResponse);
 	}
 	
+	
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<List<ErrorDTO>> handleValidationExceptions(MethodArgumentNotValidException e) {
 		List<ObjectError> erros = e.getBindingResult().getAllErrors();
