@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 //@JsonIgnoreProperties(value = { "categoria" })
 public class AnuncioDTO {
 	
+	private String codigo;
 	
 	@NotNull(message = "título é obrigatório")
 	@NotBlank(message = "título é obrigatório")
@@ -32,6 +33,7 @@ public class AnuncioDTO {
 	@NotNull(message = "valor é obrigatório")
 	private Double valor;
     private String categoria;
+    
 	
 
 	public Anuncio converte() {
@@ -40,6 +42,7 @@ public class AnuncioDTO {
 	}
 	
 	public AnuncioDTO converte(Anuncio anuncio) {
+		this.codigo = anuncio.getCodigo();
 		this.titulo = anuncio.getTitulo();
 		this.valor = anuncio.getValor();
 		this.categoria = anuncio.getCategoria();
@@ -47,6 +50,6 @@ public class AnuncioDTO {
 	}
 		
 	public static List<AnuncioDTO> converte(List<Anuncio> anuncios) {
-		return anuncios.stream().map(a -> new AnuncioDTO(a.getTitulo(), a.getValor(), a.getCategoria())).collect(Collectors.toList());
+		return anuncios.stream().map(a -> new AnuncioDTO(a.getCodigo(), a.getTitulo(), a.getValor(), a.getCategoria())).collect(Collectors.toList());
 	}
 }

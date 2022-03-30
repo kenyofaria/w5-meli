@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import br.com.meli.springdemo.entity.Anuncio;
@@ -12,6 +13,7 @@ import br.com.meli.springdemo.repository.AnuncioRepository;
 import br.com.meli.springdemo.repository.RepositoryWave5;
 
 @Service
+@Profile("test")
 public class AnuncioService {
 
 //	private static List<Anuncio> anuncios = Collections.synchronizedList(new ArrayList<Anuncio>());
@@ -62,26 +64,19 @@ public class AnuncioService {
 	
 	private boolean anuncioExistente(Anuncio anuncio) {
 		return repository.lista().stream()
-				.anyMatch(a -> a.getTitulo().equals(anuncio.getTitulo()) && a.getValor() == anuncio.getValor());
+				.anyMatch(a -> a.getTitulo().equals(anuncio.getTitulo()));
 	}
 	
 	public synchronized void salvar(Anuncio anuncio, List<Validador> validadores) {
-		validadores.forEach(v -> {
-			try {
-				v.valida();
-				if(!anuncioExistente(anuncio)) {
-					repository.insere(anuncio);
-				}else {
-					throw new RuntimeException("Anuncio já cadastrado");
-				}
-			} catch (ValidacaoException e) {
-				e.printStackTrace();
-			}
-		});	
-	}
-	public synchronized void salvar(Anuncio anuncio) {
 		if(!anuncioExistente(anuncio)) {
 			repository.insere(anuncio);
+		}else {
+			throw new RuntimeException("Anuncio já cadastrado");
+		}
+	}
+	public synchronized Anuncio salvar(Anuncio anuncio) {
+		if(!anuncioExistente(anuncio)) {
+			return repository.insere(anuncio);
 		}else {
 			throw new RuntimeException("Anuncio já cadastrado");
 		}
