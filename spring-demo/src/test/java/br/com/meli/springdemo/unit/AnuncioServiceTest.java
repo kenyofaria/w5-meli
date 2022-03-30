@@ -1,4 +1,4 @@
-package br.com.meli.springdemo;
+package br.com.meli.springdemo.unit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
