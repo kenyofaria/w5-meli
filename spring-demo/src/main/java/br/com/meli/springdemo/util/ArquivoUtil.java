@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -35,10 +38,11 @@ public class ArquivoUtil<T> {
 	}
 
 	private File getFile(String arquivo) throws IOException {
-		File file = new File(arquivo);
-		if(!file.exists())
-			file.createNewFile();
-		return file;
+		if(Files.notExists(Paths.get(arquivo))) {
+			Path path = Files.createFile(Paths.get(arquivo));
+			return path.toFile();
+		}		
+		return new File(arquivo);
 	}
 	
 	public List<String> leitura(String arquivo){
