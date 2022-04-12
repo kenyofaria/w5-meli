@@ -11,6 +11,6 @@ import br.com.meli.storage.es.model.Ad;
 public interface AdRepository extends ElasticsearchRepository<Ad, String>{
 
 	List<Ad> findByTitle(String title);
-	List<Ad> findByTitleOrTag(String termo);
-	List<Ad> findByCodeOrTitle(String c, String t);
+	List<Ad> findByTitleOrTag(String title, String tag);
+	List<Ad> findByCodeOrTitle(String code, String t);
 }

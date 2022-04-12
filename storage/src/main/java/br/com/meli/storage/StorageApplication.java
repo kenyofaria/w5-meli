@@ -2,27 +2,18 @@ package br.com.meli.storage;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.elasticsearch.index.query.IntervalsSourceProvider.Match;
-import org.elasticsearch.index.query.MatchPhrasePrefixQueryBuilder;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.Operator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 
 import br.com.meli.storage.es.model.Ad;
-import br.com.meli.storage.es.repository.AdRepository;
+import br.com.meli.storage.es.service.AdService;
 import br.com.meli.storage.model.Anuncio;
 import br.com.meli.storage.model.Carrinho;
 import br.com.meli.storage.model.Endereco;
@@ -33,8 +24,6 @@ import br.com.meli.storage.repository.AnuncioRepository;
 import br.com.meli.storage.repository.CarrinhoRepository;
 import br.com.meli.storage.repository.VendedorRepository;
 import br.com.meli.storage.service.AnuncioService;
-
-import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 
 @SpringBootApplication
 public class StorageApplication implements CommandLineRunner {
@@ -52,7 +41,7 @@ public class StorageApplication implements CommandLineRunner {
 	private CarrinhoRepository carrinhoRepository;
 
 	@Autowired
-	private AdRepository adRepository;
+	private AdService adService;
 
 	@Autowired
 	private ElasticsearchRestTemplate elasticsearchTemplate;
@@ -63,83 +52,52 @@ public class StorageApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		createDocumentsInElasticSearch();
+		adService.fetchDocuments("construcao").forEach(d -> System.out.println(d.getTitle()));
+	}
 
+	private void createDocumentsInElasticSearch() {
 		List<String> tagsFerramentas = Arrays.asList("ferramenta", "construcao");
 		List<String> tagsConstrucao = Arrays.asList("construcao");
 
-		Ad chaveFenda = adRepository.save(Ad.builder().code("3540").title("chave de fenda").price(BigDecimal.valueOf(20)).stock(200)
-				.tag(tagsFerramentas).build());
-		System.out.println("generated id: " + chaveFenda.getId());
+		Ad chaveFenda = Ad.builder()
+				.code("3540")
+				.title("chave de fenda")
+				.price(BigDecimal.valueOf(20))
+				.stock(200)
+				.tag(tagsFerramentas).build();
+		adService.create(chaveFenda);
+		
+		Ad chaveInglesa = Ad.builder()
+				.title("chave inglesa 3540")
+				.price(BigDecimal.valueOf(70))
+				.stock(200)
+				.tag(tagsFerramentas).build();
+		adService.create(chaveInglesa);
+		
+		Ad alicate = Ad.builder()
+				.title("alicate")
+				.price(BigDecimal.valueOf(90))
+				.stock(200)
+				.tag(tagsFerramentas).build();
+		adService.create(alicate);
 
-		Ad chaveInglesa = adRepository.save(Ad.builder().title("chave inglesa 3540").price(BigDecimal.valueOf(70)).stock(200)
-				.tag(tagsFerramentas).build());
-		System.out.println("generated id: " + chaveInglesa.getId());
+		Ad parafuso = Ad.builder()
+				.title("parafuso m8x25")
+				.price(BigDecimal.valueOf(90))
+				.stock(200)
+				.tag(tagsFerramentas).build();
+		adService.create(parafuso);
 
-		Ad alicate = adRepository.save(
-				Ad.builder().title("alicate").price(BigDecimal.valueOf(90)).stock(200).tag(tagsFerramentas).build());
-		System.out.println("generated id: " + alicate.getId());
-
-		Ad parafuso = adRepository.save(Ad.builder().title("parafuso m8x25").price(BigDecimal.valueOf(90)).stock(200)
-				.tag(tagsFerramentas).build());
+		Ad cimento = Ad.builder()
+				.title("cimento tocantins")
+				.price(BigDecimal.valueOf(40))
+				.stock(20)
+				.tag(tagsConstrucao).build();
+		adService.create(cimento);
 		System.out.println("generated id: " + parafuso.getId());
-
-		Ad cimento = adRepository.save(Ad.builder().title("cimento tocantins").price(BigDecimal.valueOf(40)).stock(20)
-				.tag(tagsConstrucao).build());
-		System.out.println("generated id: " + parafuso.getId());
-
-		
-		adRepository.findByCodeOrTitle("3540","3540").forEach(a->System.out.println(a.getTitle()));
-		
-		
-		
-		//adRepository.findByTitleOrTag("construcao");//.forEach(c->System.out.println(c.getTitle()));
-		
-		
-		
-		//busca1("construcao");
-
-		//busca2();
-
-		// adRepository.findByTitle("chave").forEach(ad ->
-		// System.out.println(ad.getTitle()));
-
-		// criaAnuncios();
-		// anuncioService.listar(Vendedor.builder().id(1).build()).forEach(a->System.out.println(a.getTitulo()));
-
-		// anuncioRepository.retrieveBySellersUf(UF.RS).forEach(a->System.out.println(a.getTitulo()));
-
-		// buscaAnunciosPorVendedor();
-
-		// salvandoCarrinhosComItens();
-
-		// alteraVendedorDoAnuncio();
-		// criaAnuncio();
-
-		// adicionaAnuncioAUmVendedorExistente();
 	}
 
-	private void busca2(String termo) {
-		NativeSearchQuery s = new NativeSearchQueryBuilder()
-				  .withQuery(multiMatchQuery(termo)
-				    .field("title")
-				    .field("tag")
-				    .type(MultiMatchQueryBuilder.Type.PHRASE))
-				  .build();
-		
-		SearchHits<Ad> search = elasticsearchTemplate.search(s, Ad.class, IndexCoordinates.of("ad"));
-		search.forEach(a->System.out.println(a.getContent().getTitle()));
-	}
-
-	private void busca1(String termo) {
-		MultiMatchQueryBuilder query = new MultiMatchQueryBuilder(termo, "title", "tag")
-				.operator(Operator.OR)
-				.type(MultiMatchQueryBuilder.Type.PHRASE);
-
-		NativeSearchQuery result = new NativeSearchQueryBuilder().withQuery(query).build();
-
-		SearchHits<Ad> search = elasticsearchTemplate.search(result, Ad.class, IndexCoordinates.of("ad"));
-		search.forEach(a -> System.out.println(a.getContent().getTitle()));
-	}
 
 	private void buscaAnunciosPorVendedor() {
 		List<Anuncio> anuncios = anuncioRepository.findByVendedor(Vendedor.builder().id(2).build());
