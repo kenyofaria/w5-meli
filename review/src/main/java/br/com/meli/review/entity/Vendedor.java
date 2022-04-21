@@ -1,6 +1,7 @@
 package br.com.meli.review.entity;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,5 +33,12 @@ public class Vendedor {
 	private LocalDate dataNascimento;
 	
 	private char sexo;
+	
+	public int idade() {
+		if(dataNascimento == null) {
+			return 0;
+		}
+		return Period.between(dataNascimento, LocalDate.now()).getYears();
+	}
 	
 }
